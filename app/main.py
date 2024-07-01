@@ -10,6 +10,7 @@ import logging
 from fastapi import HTTPException
 from typing import Optional
 import json 
+import re
 
 app = FastAPI()
 
@@ -34,6 +35,14 @@ def get_index():
     Serves the index.html file at the root path.
     """
     return FileResponse(app_path / "index.html")
+
+# Function to extract venue ID from the link
+# Function to extract venue ID from the link (if needed elsewhere)
+def extract_venue_id(link: str) -> int:
+    match = re.search(r'/venue/(\d+)', link)
+    if match:
+        return int(match.group(1))
+    raise ValueError("Invalid venue link. Could not extract venue ID.")
 
 @app.post("/add-review/")
 async def add_review(
@@ -70,8 +79,8 @@ async def add_review(
         # Commit the transaction
         conn.commit()
 
-        # Return a success message
-        return {"message": "Review added successfully!"}
+        # Redirect to the venue page with the added review
+        return RedirectResponse(url=f"/venue/{venue_id}", status_code=303)
 
     except sqlite3.Error as e:
         conn.rollback()  # Rollback the transaction on error
@@ -283,6 +292,7 @@ async def filter_venues(
 async def get_venue(venue_id: int):
     """
     Retrieve and display details for a specific venue based on its ID.
+    Also serves a form for adding reviews with the venue_id included.
     """
     try:
         with sqlite3.connect(db_path, check_same_thread=False) as conn:
@@ -297,16 +307,16 @@ async def get_venue(venue_id: int):
         # Convert the sqlite3.Row object to a dictionary for easier handling in the template
         venue_dict = dict(venue)
 
-        # Render the template with venue details
+        # Render the template with venue details and a form for adding a review
         template_path = app_path / "venue_page.html"
         with open(template_path, "r") as file:
             template = Template(file.read())
 
-        rendered_html = template.render(venue=venue_dict)
+        rendered_html = template.render(venue=venue_dict, venue_id=venue_id)
         return HTMLResponse(content=rendered_html)
 
     except Exception as e:
-        return HTMLResponse(content=f"An unexpected error occurred {e}", status_code=500)
+        return HTMLResponse(content=f"An unexpected error occurred: {e}", status_code=500)
 
 
 

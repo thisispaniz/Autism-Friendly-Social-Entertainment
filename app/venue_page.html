@@ -128,26 +128,46 @@ function getColorByRating(rating) {
                             </svg>
                         </div>
             <!-- Yes/No Criteria -->
-            {% if venue.food_own == 'YES' %}
-                <p class="ratingyes">+ Bringing your own food allowed</p>
+            {% if venue.food_variey >= 3 %}
+            <p class="ratingyes">+ Broader variety of food</p>
             {% else %}
-                <p class="ratingno">- Bringing your own food not allowed</p>
+            <p class="ratingno">- Limited food variety</p>
             {% endif %}
-
-            {% if venue.food_variey == 'YES' %}
-                <p class="ratingyes">+ Broader variety of food</p>
+        
+            {% if venue.food_own == 'YES' %}
+            <p class="ratingyes">+ Bringing your own food allowed</p>
+            {% else %}
+            <p class="ratingno">- Bringing your own food not allowed</p>
             {% endif %}
-
+        
             {% if venue.defined_duration == 'NO' %}
-                <p class="ratingyes">+ No defined time frame</p>
+            <p class="ratingyes">+ No defined time frame</p>
             {% endif %}
-
+        
             {% if venue.quiet_zones == 'YES' %}
-                <p class="ratingyes"> + Quiet zones available</p>
+            <p class="ratingyes"> + Quiet zones available</p>
+            {% else %}
+            <p class="ratingno">- No quiet zones available</p>
             {% endif %}
-
+        
             {% if venue.playground == 'YES' %}
-                <p class="ratingyes">+ (fenced) Playground available</p>
+            <p class="ratingyes"> + Play area available</p>
+            {% endif %}
+        
+            {% if venue.fenced == 'YES' %}
+            <p class="ratingyes"> + Fenced play area</p>
+            {% endif %}
+        
+            {% if venue.colors <= 2 %}
+            <p class="ratingyes"> + No flashy colors</p>
+            {% else %}
+            <p class="ratingno">- Flashy colors might be apparent</p>
+            {% endif %}
+        
+            {% if venue.smells <= 2 %}
+            <p class="ratingyes"> + No extreme smells</p>
+            {% else %}
+            <p class="ratingno">- Extreme smells might be apparent</p>
             {% endif %}
 
 
@@ -175,11 +195,12 @@ function getColorByRating(rating) {
             <div class="reviewcontent" style="width: auto; display: flex; justify-content: space-between;">
                 <div class="reviewbox">
                     <span style="font-size: 15px; font-weight: 500; color: #05241B; line-height: 0px;">Write a review:</span>
-                    <form style="display: flex; flex-direction: column; margin-top: 10px; background-color: #F7F9F3; border-radius: 10px; padding: 5px;">
-                        <input class="reviewtitle" type="text" placeholder="Title of your review">
-                        <textarea class="reviewtext" placeholder="Write your review here..."></textarea>
-                        <button style="color: #F7F9F3; font-size: 15px; width: 220px; margin-top: 20px;">Submit review </button>
-                    </form>
+                    <form action="/add-review/" method="post" style="display: flex; flex-direction: column; margin-top: 10px; background-color: #F7F9F3; border-radius: 10px; padding: 5px;">
+                        <input type="hidden" name="venue_id" value="{{ venue_id }}">
+                        <input class="reviewtitle" name="review_title" type="text" placeholder="Title of your review">
+                        <textarea class="reviewtext" name="review_text" placeholder="Write your review here..."></textarea>
+                        <button type="submit" style="color: #F7F9F3; font-size: 15px; width: 220px; margin-top: 20px;">Submit review </button>
+                    
                 </div>
                 <div class="reviewfilters" >
                     <div>
@@ -187,19 +208,19 @@ function getColorByRating(rating) {
                         <div class="rating-container">
                             <div class="rating" style="margin-top: 15px;">
                                 <label for="starc1"></label>
-                                <input type="radio" id="starc1" name="rating" value="1" onclick="changeRatingc(1)">
+                                <input type="radio" id="starc1" name="crowdedness" value="1" onclick="changeRatingc(1)">
                                 
                                 <label for="starc2"></label>
-                                <input type="radio" id="starc2" name="rating" value="2" onclick="changeRatingc(2)">
+                                <input type="radio" id="starc2" name="crowdedness" value="2" onclick="changeRatingc(2)">
                                 
                                 <label for="starc3"></label>
-                                <input type="radio" id="starc3" name="rating" value="3" onclick="changeRatingc(3)">
+                                <input type="radio" id="starc3" name="crowdedness" value="3" onclick="changeRatingc(3)">
                                 
                                 <label for="starc4"></label>
-                                <input type="radio" id="starc4" name="rating" value="4" onclick="changeRatingc(4)">
+                                <input type="radio" id="starc4" name="crowdedness" value="4" onclick="changeRatingc(4)">
                                 
                                 <label for="starc5"></label>
-                                <input type="radio" id="starc5" name="rating" value="5" onclick="changeRatingc(5)">
+                                <input type="radio" id="starc5" name="crowdedness" value="5" onclick="changeRatingc(5)">
                             </div>
                             <div class="rating-labels" style="margin-bottom: 15px;">
                                 <span style="color: #429B80;">Very uncrowded</span>
@@ -215,19 +236,19 @@ function getColorByRating(rating) {
                         <div class="rating-container">
                             <div class="rating" style="margin-top: 15px;">
                                 <label for="starn1"></label>
-                                <input type="radio" id="starn1" name="rating" value="1" onclick="changeRatingn(1)">
+                                <input type="radio" id="starn1" name="quiet" value="1" onclick="changeRatingn(1)">
                                 
                                 <label for="starn2"></label>
-                                <input type="radio" id="starn2" name="rating" value="2" onclick="changeRatingn(2)">
+                                <input type="radio" id="starn2" name="quiet" value="2" onclick="changeRatingn(2)">
                                 
                                 <label for="starn3"></label>
-                                <input type="radio" id="starn3" name="rating" value="3" onclick="changeRatingn(3)">
+                                <input type="radio" id="starn3" name="quiet" value="3" onclick="changeRatingn(3)">
                                 
                                 <label for="starn4"></label>
-                                <input type="radio" id="starn4" name="rating" value="4" onclick="changeRatingn(4)">
+                                <input type="radio" id="starn4" name="quiet" value="4" onclick="changeRatingn(4)">
                                 
                                 <label for="starn5"></label>
-                                <input type="radio" id="starn5" name="rating" value="5" onclick="changeRatingn(5)">
+                                <input type="radio" id="starn5" name="quiet" value="5" onclick="changeRatingn(5)">
                             </div>
                             <div class="rating-labels" style="margin-bottom: 15px;">
                                 <span style="color: #429B80;">Very quiet</span>
@@ -242,63 +263,63 @@ function getColorByRating(rating) {
                         <ul class="checklist">
                             <li>
                                 <label>Quiet areas available:</label>
-                                <input type="checkbox" id="option1-yes" name="option1" value="yes" onchange="handleCheckboxChange('option1', 'yes')">
+                                <input type="checkbox" id="option1-yes" name="quiet_zones" value="yes" onchange="handleCheckboxChange('option1', 'yes')">
                                 <label for="option1-yes">Yes</label>
-                                <input type="checkbox" id="option1-no" name="option1" value="no" onchange="handleCheckboxChange('option1', 'no')">
+                                <input type="checkbox" id="option1-no" name="quiet_zones" value="no" onchange="handleCheckboxChange('option1', 'no')">
                                 <label for="option1-no">No</label>
                             </li>
                             <li>
                                 <label>Play area available:</label>
-                                <input type="checkbox" id="option2-yes" name="option2" value="yes" onchange="handleCheckboxChange('option2', 'yes')">
+                                <input type="checkbox" id="option2-yes" name="playground" value="yes" onchange="handleCheckboxChange('option2', 'yes')">
                                 <label for="option2-yes">Yes</label>
-                                <input type="checkbox" id="option2-no" name="option2" value="no" onchange="handleCheckboxChange('option2', 'no')">
+                                <input type="checkbox" id="option2-no" name="playground" value="no" onchange="handleCheckboxChange('option2', 'no')">
                                 <label for="option2-no">No</label>
                             </li>
                             <li>
                                 <label>Play area fenced/secure:</label>
-                                <input type="checkbox" id="option3-yes" name="option3" value="yes" onchange="handleCheckboxChange('option3', 'yes')">
+                                <input type="checkbox" id="option3-yes" name="fenced" value="yes" onchange="handleCheckboxChange('option3', 'yes')">
                                 <label for="option3-yes">Yes</label>
-                                <input type="checkbox" id="option3-no" name="option3" value="no" onchange="handleCheckboxChange('option3', 'no')">
+                                <input type="checkbox" id="option3-no" name="fenced" value="no" onchange="handleCheckboxChange('option3', 'no')">
                                 <label for="option3-no">No</label>
                             </li>
                             <li>
                                 <label>Bright/Flashy colors:</label>
-                                <input type="checkbox" id="option4-yes" name="option4" value="5" onchange="handleCheckboxChange('option4', 'yes')">
+                                <input type="checkbox" id="option4-yes" name="colors" value="5" onchange="handleCheckboxChange('option4', 'yes')">
                                 <label for="option4-yes">Yes</label>
-                                <input type="checkbox" id="option4-no" name="option4" value="1" onchange="handleCheckboxChange('option4', 'no')">
+                                <input type="checkbox" id="option4-no" name="colors" value="1" onchange="handleCheckboxChange('option4', 'no')">
                                 <label for="option4-no">No</label>
                             </li>
                             <li>
                                 <label>Food options available:</label>
-                                <input type="checkbox" id="option5-yes" name="option5" value="5" onchange="handleCheckboxChange('option5', 'yes')">
+                                <input type="checkbox" id="option5-yes" name="food_variey" value="5" onchange="handleCheckboxChange('option5', 'yes')">
                                 <label for="option5-yes">Yes</label>
-                                <input type="checkbox" id="option5-no" name="option5" value="1" onchange="handleCheckboxChange('option5', 'no')">
+                                <input type="checkbox" id="option5-no" name="food_variey" value="1" onchange="handleCheckboxChange('option5', 'no')">
                                 <label for="option5-no">No</label>
                             </li>
                             <li>
                                 <label>Heavy smells:</label>
-                                <input type="checkbox" id="option6-yes" name="option6" value="5" onchange="handleCheckboxChange('option6', 'yes')">
+                                <input type="checkbox" id="option6-yes" name="smells" value="5" onchange="handleCheckboxChange('option6', 'yes')">
                                 <label for="option6-yes">Yes</label>
-                                <input type="checkbox" id="option6-no" name="option6" value="1" onchange="handleCheckboxChange('option6', 'no')">
+                                <input type="checkbox" id="option6-no" name="smells" value="1" onchange="handleCheckboxChange('option6', 'no')">
                                 <label for="option6-no">No</label>
                             </li>
                             <li>
                                 <label>Bringing your own food possible:</label>
-                                <input type="checkbox" id="option7-yes" name="option7" value="yes" onchange="handleCheckboxChange('option7', 'yes')">
+                                <input type="checkbox" id="option7-yes" name="food_own" value="yes" onchange="handleCheckboxChange('option7', 'yes')">
                                 <label for="option7-yes">Yes</label>
-                                <input type="checkbox" id="option7-no" name="option7" value="no" onchange="handleCheckboxChange('option7', 'no')">
+                                <input type="checkbox" id="option7-no" name="food_own" value="no" onchange="handleCheckboxChange('option7', 'no')">
                                 <label for="option7-no">No</label>
                             </li>
                             <li>
                                 <label>Extended stay duration possible:</label>
-                                <input type="checkbox" id="option8-yes" name="option8" value="yes" onchange="handleCheckboxChange('option8', 'yes')">
+                                <input type="checkbox" id="option8-yes" name="defined_duration" value="yes" onchange="handleCheckboxChange('option8', 'yes')">
                                 <label for="option8-yes">Yes</label>
-                                <input type="checkbox" id="option8-no" name="option8" value="no" onchange="handleCheckboxChange('option8', 'no')">
+                                <input type="checkbox" id="option8-no" name="defined_duration" value="no" onchange="handleCheckboxChange('option8', 'no')">
                                 <label for="option8-no">No</label>
                             </li>
                         </ul>
                     </div>
-
+                </form>
                 </div>
             </div>
         </div>
